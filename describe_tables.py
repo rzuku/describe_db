@@ -46,13 +46,16 @@ if not USER:
     print ("DB_USER variable is not set")
     sys.exit(2)
 
-db_conection = mysql.connector.connect(
-  host=host,
-  user=USER,
-  password=PASSWORD,
-  database=dbs
-)
-
+try:
+    db_conection = mysql.connector.connect(
+    host=host,
+    user=USER,
+    password=PASSWORD,
+    database=dbs
+    )
+except mysql.connector.errors.ProgrammingError as ie:
+    print("Exception : {0}".format(ie))
+    sys.exit(2)
 
 db_cursor = db_conection.cursor(buffered=True)
 db_cursor.execute(sql_query)
