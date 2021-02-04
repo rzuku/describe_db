@@ -12,11 +12,11 @@ def prepare_sql_query(all,dbs):
 
 parser = argparse.ArgumentParser(add_help=True)
 group = parser.add_argument_group('host')
-group.add_argument('-H', action="store")
+group.add_argument('-H', action="store", help='provide DB Host address')
 group = parser.add_mutually_exclusive_group()
-group.add_argument('-A', action="store_true", default=True)
-group.add_argument('-l', action='store')
-group.add_argument('-d', action='store')
+group.add_argument('-A', action="store_true", default=True, help='will get structure of all DBs')
+group.add_argument('-l', action='store', help='provide substring of db name. This will be used to go to all dbs like ...')
+group.add_argument('-d', action='store', help='provide db name')
 
 options_values = parser.parse_args()
 host=options_values.H
@@ -62,14 +62,14 @@ db_cursor.execute(sql_query)
 db_result = db_cursor.fetchall()
 
 
-for x in db_result:
-  table_name=(str(x).replace('\'', '').replace('(', '').replace(')', '').replace(',', ''))
+for table in db_result:
+  table_name=(str(table).replace('\'', '').replace('(', '').replace(')', '').replace(',', ''))
   print(table_name)
   describe_table=("describe "+table_name)
   file_name=(table_name+".txt")
   db_cursor.execute(describe_table)
-  table_description=str(db_cursor.fetchall()).replace('[','').replace(']','').replace('), ','\n').replace('(\'','\'')
-  table_description=re.sub('\)$', '', table_description)
+  table_description=re.sub('\)\]$|^\[\(', '', str(db_cursor.fetchall()))
+  table_description=re.sub('\), \(', '\n', table_description)
   f = open(file_name, "w")
   f.write(table_description)
   f.close()
