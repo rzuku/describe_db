@@ -65,7 +65,7 @@ for x in db_result:
   describe_table=("describe "+table_name)
   file_name=(table_name+".txt")
   db_cursor.execute(describe_table)
-  table_description=str(db_cursor.fetchall()).replace('[','').replace(']','').replace('), ','\n').replace('(\'','\'')#.replace(')$','')
+  table_description=str(db_cursor.fetchall()).replace('[','').replace(']','').replace('), ','\n').replace('(\'','\'')
   table_description=re.sub('\)$', '', table_description)
   f = open(file_name, "w")
   f.write(table_description)
