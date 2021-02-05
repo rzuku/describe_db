@@ -9,16 +9,16 @@ def prepare_sql_query(all):
     if all == "yes":
         sql_query = (
             "select concat(table_schema,'.',table_name) from \
-                information_schema.tables where table_schema != %s")
+            information_schema.tables where table_schema != %s")
     elif all == "no":
         sql_query = (
             "select concat(table_schema,'.',table_name) from \
-                information_schema.tables where table_schema = %s")
+            information_schema.tables where table_schema = %s")
     else:
         sql_query = (
             "select concat(table_schema,'.',table_name) from \
-                information_schema.tables where table_schema like \
-                concat('%', %s, '%')")
+            information_schema.tables where table_schema like \
+            concat('%', %s, '%')")
     return sql_query
 
 parser = argparse.ArgumentParser(add_help=True)
@@ -29,7 +29,7 @@ group.add_argument('-A', action="store_true", default=True,
                    help='will get structure of all DBs')
 group.add_argument('-l', action='store',
                    help='provide substring of db name. This will be used to go \
-                       to all dbs like ...')
+                   to all dbs like ...')
 group.add_argument('-d', action='store', help='provide db name')
 
 options_values = parser.parse_args()
