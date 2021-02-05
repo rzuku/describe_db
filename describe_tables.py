@@ -5,20 +5,23 @@ import os
 import sys
 import re
 
+
 def prepare_sql_query(all):
     if all == "yes":
         sql_query = (
-            "select concat(table_schema,'.',table_name) from information_schema.tables \
-                where table_schema != %s")
+            "select concat(table_schema,'.',table_name) from \
+                information_schema.tables where table_schema != %s")
     elif all == "no":
         sql_query = (
-            "select concat(table_schema,'.',table_name) from information_schema.tables \
-                where table_schema = %s")
+            "select concat(table_schema,'.',table_name) from \
+                information_schema.tables where table_schema = %s")
     else:
         sql_query = (
-            "select concat(table_schema,'.',table_name) from information_schema.tables \
-                where table_schema like concat('%', %s, '%')")
+            "select concat(table_schema,'.',table_name) from \
+                information_schema.tables where table_schema like \
+                concat('%', %s, '%')")
     return sql_query
+
 
 parser = argparse.ArgumentParser(add_help=True)
 group = parser.add_argument_group('host')
@@ -36,6 +39,7 @@ host = options_values.H
 db = options_values.d
 db_grep = options_values.l
 db_all = options_values.A
+
 
 if db:
     all = "no"
@@ -70,6 +74,7 @@ sql_query = prepare_sql_query(all)
 db_cursor = db_conection.cursor(buffered=True)
 db_cursor.execute(sql_query, (db, ))
 db_result = db_cursor.fetchall()
+
 
 for table in db_result:
     table_name = (str(table).replace('\'', '').replace(
